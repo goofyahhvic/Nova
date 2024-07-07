@@ -1,4 +1,3 @@
-#include "NeoInfused/core/neo_scoped-timer.hpp"
 #include "nova_pch.hpp"
 #include "nova_game.hpp"
 
