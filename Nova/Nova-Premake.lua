@@ -27,15 +27,8 @@ project "Nova"
     }
     links {
         "NeoInfused",
-        "GLFW",
         "glad",
-        "Xcursor",
-        "Xinerama",
-        "Xrandr",
-        "Xi",
-        "dl",
-        "X11",
-        "m"
+        "GLFW"
     }
 
     filter "system:linux"
