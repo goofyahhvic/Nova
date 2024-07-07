@@ -1,13 +1,14 @@
 #include "nova_pch.hpp"
-#include "nova_game.hpp"
+#include "layers/nova_mainlayer.hpp"
 
 namespace nova {
-    int Main(int argc, char** argv) {
+    static int main(int argc, char** argv) {
         try {
             neo::Core::Init({argc, argv, NEO_RENDERERAPI_OPENGL});
             {
-                Game game;
-                game.loop();
+                neo::App app(1280, 720, "Neo-Infused Cybernetic Endeavors");
+                app.layer_group.create<MainLayer>(5000);
+                app.run();
             }
             neo::Core::Terminate();
         } catch (const std::exception& e) {
@@ -20,10 +21,10 @@ namespace nova {
 
 #if (defined(NEO_PLATFORM_WINDOWS) && defined(NEO_CONFIG_DIST))
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) {
-    return nova::Main(__argc, __argv);
+    return nova::main(__argc, __argv);
 }
 #else
 int main(int argc, char* argv[]) {
-    return nova::Main(argc, argv);
+    return nova::main(argc, argv);
 }
 #endif // NEO_PLATFORM_WINDOWS && NEO_CONFIG_DIST
