@@ -1,22 +1,31 @@
-#include "NeoInfused/core/neo_event.hpp"
-#include "NeoInfused/core/neo_input_macros.h"
 #include "nova_pch.hpp"
 #include "nova_mainlayer.hpp"
 
+enum novaComponentSlots {
+    POSITION_COMPONENT = 0,
+    SIZE_COMPONENT = 1,
+    TEXTURE_COMPONENT = 2
+};
+
 namespace nova {
     static neo::Vertex vertices[3] = {
-    { {-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-    { { 0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-    { { 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }
+        { {-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
+        { { 0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
+        { { 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }
     };
     MainLayer::MainLayer(int32_t priority, uint8_t state)
     : neo::Layer(priority, state),
-    m_Program(neo::vertex_shader, neo::fragment_shader),
-    m_Triangle(vertices) {
+    m_Program({
+        neo::gl::CreateShader({ neo::Shaders::default_vertex, GL_VERTEX_SHADER }),
+        neo::gl::CreateShader({ neo::Shaders::default_fragment, GL_FRAGMENT_SHADER }) 
+    }), m_Triangle(vertices) {
         m_Input.reset();
     }
+    MainLayer::~MainLayer(void) {
 
-    void MainLayer::on_event(const neo::Event* e) {
+    }
+
+    void MainLayer::on_event(const neo::Event& e) {
         m_Input.on_event(e);
     }
     void MainLayer::update(void) {
@@ -28,8 +37,8 @@ namespace nova {
             m_Triangle.set_color( {0.0f, 0.0f, 0.0f, 1.0f},0);
         }
     }
-    void MainLayer::draw(void) {
-        m_Program.use();
+    void MainLayer::draw(size_t window_id) {
+        m_Program.bind();
         m_Triangle.draw();
     }
 } // namespace nova

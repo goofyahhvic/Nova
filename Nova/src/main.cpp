@@ -4,13 +4,10 @@
 namespace nova {
     static int main(int argc, char** argv) {
         try {
-            neo::Core::Init({argc, argv, NEO_RENDERERAPI_OPENGL});
-            {
-                neo::App app(1280, 720, "Neo-Infused Cybernetic Endeavors");
-                app.layer_group.create<MainLayer>(5000);
-                app.run();
-            }
-            neo::Core::Terminate();
+            neo::App app({ argc, argv, NEO_RENDERERAPI_OPENGL });
+            app.windows.create_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
+            app.layers.create_layer<MainLayer>(5000);
+            app.run();
         } catch (const std::exception& e) {
             NEO_FATAL_LOG("Exception caught in main: {0}", e.what());
             return -1;

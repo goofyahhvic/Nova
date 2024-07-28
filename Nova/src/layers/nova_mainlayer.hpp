@@ -1,5 +1,5 @@
-#if !defined(NOVA_LAYERS_HPP)
-#define NOVA_LAYERS_HPP
+#if !defined(NOVA_MAIN_LAYER_HPP)
+#define NOVA_MAIN_LAYER_HPP
 
 #include <NeoInfused/NeoInfused.hpp>
 
@@ -7,16 +7,16 @@ namespace nova {
     class MainLayer : public neo::Layer {
     public:
         MainLayer(int32_t priority, uint8_t state = NEO_LAYERSTATE_ALL);
-        ~MainLayer(void) = default;
+        ~MainLayer(void);
     public:
-        void on_event(const neo::Event* e) override;
+        void on_event(const neo::Event& e) override;
         void update(void) override;
-        void draw(void) override;
+        void draw(size_t window_id) override;
     private:
         neo::Input m_Input;
-        neo::ShaderProgram m_Program;
+        neo::gl::ShaderProgram m_Program;
         neo::Triangle m_Triangle;
     };
 } // namespace nova
 
-#endif // NOVA_LAYERS_HPP
+#endif // NOVA_MAIN_LAYER_HPP
