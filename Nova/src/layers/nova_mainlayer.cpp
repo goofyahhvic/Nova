@@ -8,18 +8,29 @@ enum novaComponentSlots {
 };
 
 namespace nova {
-    static neo::Vertex vertices[3] = {
-        { {-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-        { { 0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-        { { 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }
+    struct Vertex {
+        glm::vec3 pos;
+        glm::vec4 color;
+    };
+    static Vertex vertices[3] = {
+        { {-0.5f, -0.5f, 0.0f}, { 0.9f, 0.4f, 0.4f, 1.0f } },
+        { { 0.5f, -0.5f, 0.0f}, { 0.4f, 0.9f, 0.4f, 1.0f } },
+        { { 0.0f,  0.5f, 0.0f}, { 0.4f, 0.4f, 0.9f, 1.0f } }
+    };
+    static uint32_t indices[3] {
+        0, 1, 2
     };
     MainLayer::MainLayer(int32_t priority, uint8_t state)
     : neo::Layer(priority, state),
-    m_Program({
-        neo::gl::CreateShader({ neo::Shaders::default_vertex, GL_VERTEX_SHADER }),
-        neo::gl::CreateShader({ neo::Shaders::default_fragment, GL_FRAGMENT_SHADER }) 
-    }), m_Triangle(vertices) {
+    m_Program(neo::ShaderProgram::Create()),
+    m_VertexBuffer(neo::VertexBuffer::Create(vertices, 3 * sizeof(Vertex))),
+    m_IndexBuffer(neo::IndexBuffer::Create(indices, 3)) {
         m_Input.reset();
+        neo::GetScenes().create_scene<neo::Scene>(50);
+        m_VertexBuffer->set_layout({
+            { 3, neo::Type::Float },
+            { 4, neo::Type::Float }
+        });
     }
     MainLayer::~MainLayer(void) {
 
@@ -29,16 +40,12 @@ namespace nova {
         m_Input.on_event(e);
     }
     void MainLayer::update(void) {
-        if (m_Input.key(NEO_KEY_0)) {
-            m_Triangle.set_color( {0.0f, 0.0f, 1.0f, 1.0f},0);
-        } else if (m_Input.key(NEO_KEY_1)) {
-            m_Triangle.set_color( {0.6f, 0.0f, 0.460897f, 1.0f},0);
-        } else if (m_Input.key(NEO_KEY_2)) {
-            m_Triangle.set_color( {0.0f, 0.0f, 0.0f, 1.0f},0);
-        }
+
     }
     void MainLayer::draw(size_t window_id) {
-        m_Program.bind();
-        m_Triangle.draw();
+        m_Program->bind();
+        m_VertexBuffer->bind();
+        m_IndexBuffer->bind();
+        glDrawElements(GL_TRIANGLES, m_IndexBuffer->count(), GL_UNSIGNED_INT, 0);
     }
 } // namespace nova

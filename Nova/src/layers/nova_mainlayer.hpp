@@ -14,8 +14,9 @@ namespace nova {
         void draw(size_t window_id) override;
     private:
         neo::Input m_Input;
-        neo::gl::ShaderProgram m_Program;
-        neo::Triangle m_Triangle;
+        std::unique_ptr<neo::ShaderProgram> m_Program;
+        std::unique_ptr<neo::VertexBuffer> m_VertexBuffer;
+        std::unique_ptr<neo::IndexBuffer> m_IndexBuffer;
     };
 } // namespace nova
 
