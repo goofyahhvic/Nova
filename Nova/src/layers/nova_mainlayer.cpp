@@ -42,10 +42,10 @@ namespace nova {
     void MainLayer::update(void) {
 
     }
-    void MainLayer::draw(size_t window_id) {
+    void MainLayer::draw(void) {
         m_Program->bind();
         m_VertexBuffer->bind();
         m_IndexBuffer->bind();
-        glDrawElements(GL_TRIANGLES, m_IndexBuffer->count(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, m_IndexBuffer->count(), GL_UNSIGNED_INT, nullptr);
     }
 } // namespace nova

@@ -11,7 +11,7 @@ namespace nova {
     public:
         void on_event(const neo::Event& e) override;
         void update(void) override;
-        void draw(size_t window_id) override;
+        void draw(void) override;
     private:
         neo::Input m_Input;
         std::unique_ptr<neo::ShaderProgram> m_Program;
