@@ -39,7 +39,12 @@ namespace nova {
 		m_Input.on_event(e);
 	}
 	void MainLayer::update(void)
-	{}
+	{
+		if (C_INPUT->mouse_button(NEO_MOUSE_BUTTON_1))
+		{
+			NEO_TRACE_LOG("Button");
+		}
+	}
 	void MainLayer::draw(void)
 	{
 		m_Program->bind();
