@@ -1,0 +1,46 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "dbg",
+            "displayName": "Configure Debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "rel",
+            "displayName": "Configure Release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "dist",
+            "displayName": "Configure Distribution",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Distribution"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "dbg",
+            "configurePreset": "dbg"
+        },
+        {
+            "name": "rel",
+            "configurePreset": "rel"
+        },
+        {
+            "name": "dist",
+            "configurePreset": "dist"
+        }
+    ]
+}
