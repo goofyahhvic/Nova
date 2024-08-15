@@ -1,96 +1,25 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Build Premake and Debug",
-            "type": "shell",
-            "command": "./dependencies/premake/bin/linux/premake5 gmake && make",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Clean Build Premake and Debug",
-            "type": "shell",
-            "command": "make clean && ./dependencies/premake/bin/linux/premake5 gmake && make",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Build Premake and Release",
-            "type": "shell",
-            "command": "./dependencies/premake/bin/linux/premake5 gmake && make config=rel",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Build and Run Release",
-            "type": "shell",
-            "command": "./dependencies/premake/bin/linux/premake5 gmake && make config=rel && ./bin/rel-linux/Nova/Nova-bin",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Clean Build Premake and Release",
-            "type": "shell",
-            "command": "make clean config=rel && ./dependencies/premake/bin/linux/premake5 gmake && make config=rel",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Clean Build and Run Release",
-            "type": "shell",
-            "command": "make clean config=rel && ./dependencies/premake/bin/linux/premake5 gmake && make config=rel && ./bin/rel-linux/Nova/Nova-bin",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Build Premake and Dist",
-            "type": "shell",
-            "command": "./dependencies/premake/bin/linux/premake5 gmake && make config=dist",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Build Premake and run Dist",
-            "type": "shell",
-            "command": "make clean config=dist && ./dependencies/premake/bin/linux/premake5 gmake && make config=dist && ./bin/dist-linux/Nova/Nova-bin",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Clean Build Premake and Dist",
-            "type": "shell",
-            "command": "./dependencies/premake/bin/linux/premake5 gmake && make config=dist",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        },
-        {
-            "label": "Clean Build and Run Dist",
-            "type": "shell",
-            "command": "make clean config=dist && ./dependencies/premake/bin/linux/premake5 gmake && make config=dist && ./bin/rel-linux/Nova/Nova-bin",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
-        }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "configure",
+			"command": "configure",
+			"preset": "${command:cmake.activeConfigurePresetName}",
+			"problemMatcher": [],
+			"detail": "CMake template configure task"
+		},
+		{
+			"type": "cmake",
+			"label": "build",
+			"command": "build",
+			"targets": [
+				"all"
+			],
+			"preset": "${command:cmake.activeBuildPresetName}",
+			"group": "build",
+			"problemMatcher": [],
+			"detail": "CMake template build task"
+		}
+	]
 }
