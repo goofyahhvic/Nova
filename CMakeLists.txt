@@ -9,6 +9,6 @@ add_executable(Nova
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/NeoInfused)
 
+add_precompiled_header("nova_pch.hpp" "nova_pch.cpp" ${CMAKE_CURRENT_SOURCE_DIR}/Nova/src Nova ${CMAKE_CURRENT_SOURCE_DIR}/Nova/src)
 target_include_directories(Nova PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Nova/src)
 target_link_libraries(Nova NeoInfused)
-
