@@ -4,8 +4,7 @@
 namespace nova {
 	static int main(int argc, char** argv)
 	{
-		try
-		{
+		try {
 			neo::App app({ argc, argv, NEO_RENDERERAPI_OPENGL }, { 0.12f, 0.12f, 0.18f, 1.0f });
 			app.windows.create_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
 			app.layers.create_layer<MainLayer>(5000);
