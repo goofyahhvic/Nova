@@ -14,8 +14,6 @@ namespace nova {
 		void draw(void) override;
 	private:
 		neo::Input m_Input;
-		std::unique_ptr<neo::ShaderProgram> m_Program;
-		std::unique_ptr<neo::Mesh> m_Mesh;
 	};
 } // namespace nova
 

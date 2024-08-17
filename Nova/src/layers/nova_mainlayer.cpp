@@ -2,22 +2,8 @@
 #include "nova_mainlayer.hpp"
 
 namespace nova {
-	struct Vertex {
-		glm::vec3 pos;
-		glm::vec4 color;
-	};
-	static Vertex vertices[3]{
-		{ {-0.5f, -0.5f, 0.0f}, { 0.9f, 0.4f, 0.4f, 1.0f } },
-		{ { 0.5f, -0.5f, 0.0f}, { 0.4f, 0.9f, 0.4f, 1.0f } },
-		{ { 0.0f,  0.5f, 0.0f}, { 0.4f, 0.4f, 0.9f, 1.0f } }
-	};
 	MainLayer::MainLayer(int32_t priority, uint8_t state)
-	: neo::Layer(priority, state),
-	m_Mesh(neo::Mesh::Create(
-		vertices, 3 * sizeof(Vertex),
-		{ { 3, neo::Type::Float }, { 4, neo::Type::Float } },
-		{ 0, 1, 2 })
-	), m_Program(neo::ShaderProgram::Create())
+	: neo::Layer(priority, state)
 	{
 		m_Input.reset();
 		neo::GetScenes().create_scene<neo::Scene>(50);
@@ -38,7 +24,6 @@ namespace nova {
 	}
 	void MainLayer::draw(void)
 	{
-		m_Program->bind();
-		m_Mesh->draw();
+		
 	}
 } // namespace nova

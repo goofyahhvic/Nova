@@ -22,12 +22,10 @@ project "Nova"
         "src/",
         "%{NEOINFUSED}/include/",
         "%{NEOINFUSED}/%{INCLUDE_DIR.GLFW}",
-        "%{NEOINFUSED}/%{INCLUDE_DIR.glad}",
         "%{NEOINFUSED}/%{INCLUDE_DIR.glm}"
     }
     links {
         "NeoInfused",
-        "glad",
         "GLFW"
     }
 
