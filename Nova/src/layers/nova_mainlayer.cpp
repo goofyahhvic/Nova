@@ -7,6 +7,8 @@ namespace nova {
 	{
 		m_Input.reset();
 		neo::GetScenes().create_scene<neo::Scene>(50);
+		inf::hello();
+		inf::world();
 	}
 	MainLayer::~MainLayer(void)
 	{}

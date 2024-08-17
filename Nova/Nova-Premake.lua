@@ -22,11 +22,14 @@ project "Nova"
         "src/",
         "%{NEOINFUSED}/include/",
         "%{NEOINFUSED}/%{INCLUDE_DIR.GLFW}",
-        "%{NEOINFUSED}/%{INCLUDE_DIR.glm}"
+        "%{NEOINFUSED}/%{INCLUDE_DIR.glm}",
+        "%{NEOINFUSED}/%{INCLUDE_DIR.inf}"
     }
     links {
         "NeoInfused",
-        "GLFW"
+        "GLFW",
+        "InfluxRenderer",
+        "Influx-vk"
     }
 
     filter "system:linux"
@@ -39,9 +42,6 @@ project "Nova"
             "_CRT_SECURE_NO_WARNINGS"
         }
 
-    filter { "configurations:dist", "system:windows" }
-        kind "WindowedApp"
-
     filter "configurations:dbg"
         symbols "On"
         runtime "Debug"
@@ -52,6 +52,7 @@ project "Nova"
         runtime "Release"
         defines { "NEO_CONFIG_RELEASE" }
     filter "configurations:dist"
+        kind "WindowedApp"
         optimize "speed"
         symbols "off"
         runtime "Release"
