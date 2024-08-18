@@ -1,4 +1,5 @@
 NEOINFUSED = "../NeoInfused"
+INFLUX_VK_BIN = "../bin/%{OUTPUT_DIR}/Influx-vk/Influx-vk-bin"
 
 project "Nova"
     location "./"
@@ -28,18 +29,23 @@ project "Nova"
     links {
         "NeoInfused",
         "GLFW",
-        "InfluxRenderer",
-        "Influx-vk"
+        "InfluxRenderer"
     }
 
     filter "system:linux"
         toolset "gcc"
         defines { "NEO_PLATFORM_LINUX" }
+        postbuildcommands {
+            ("{COPY} %{INFLUX_VK_BIN}.so ../bin/%{OUTPUT_DIR}/Nova/")
+        }
     filter "system:windows"
         toolset "msc"
         defines {
             "NEO_PLATFORM_WINDOWS",
             "_CRT_SECURE_NO_WARNINGS"
+        }
+        postbuildcommands {
+            ("{COPY} %{INFLUX_VK_BIN}.dll ../bin/%{OUTPUT_DIR}/Nova/")
         }
 
     filter "configurations:dbg"

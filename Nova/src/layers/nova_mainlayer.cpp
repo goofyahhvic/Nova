@@ -7,11 +7,13 @@ namespace nova {
 	{
 		m_Input.reset();
 		neo::GetScenes().create_scene<neo::Scene>(50);
-		inf::hello();
-		inf::world();
+		inf::init();
+		inf::hello_world();
 	}
 	MainLayer::~MainLayer(void)
-	{}
+	{
+	
+	}
 
 	void MainLayer::on_event(const neo::Event& e)
 	{
