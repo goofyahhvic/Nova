@@ -36,7 +36,7 @@ project "Nova"
         toolset "gcc"
         defines { "NEO_PLATFORM_LINUX" }
         postbuildcommands {
-            ("{COPY} %{INFLUX_VK_BIN}.so ../bin/%{OUTPUT_DIR}/Nova/")
+            ("{COPY} ../bin/%{OUTPUT_DIR}/Influx-vk/libInflux-vk-bin.so ../bin/%{OUTPUT_DIR}/Nova/")
         }
     filter "system:windows"
         toolset "msc"

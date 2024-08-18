@@ -1,25 +1,12 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "cmake",
-			"label": "configure",
-			"command": "configure",
-			"preset": "${command:cmake.activeConfigurePresetName}",
-			"problemMatcher": [],
-			"detail": "CMake template configure task"
-		},
-		{
-			"type": "cmake",
-			"label": "build",
-			"command": "build",
-			"targets": [
-				"all"
-			],
-			"preset": "${command:cmake.activeBuildPresetName}",
-			"group": "build",
-			"problemMatcher": [],
-			"detail": "CMake template build task"
-		}
-	]
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "python3 Generate.py make && make"
+        }
+    ]
 }
