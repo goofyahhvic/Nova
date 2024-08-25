@@ -7,8 +7,8 @@ namespace nova {
 	{
 		m_Input.reset();
 		neo::GetScenes().create_scene<neo::Scene>(50);
-		inf::init();
-		inf::hello_world();
+		inf::Loader::Load(inf::RendererAPI::Vulkan);
+		inf::Loader::hello_world();
 	}
 	MainLayer::~MainLayer(void)
 	{

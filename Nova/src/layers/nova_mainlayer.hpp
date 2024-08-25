@@ -2,7 +2,7 @@
 #define NOVA_MAIN_LAYER_HPP
 
 #include <NeoInfused/NeoInfused.hpp>
-#include <influx/inf_hello-world.hpp>
+#include <influx/inf_loader.hpp>
 
 namespace nova {
 	class MainLayer : public neo::Layer {
