@@ -5,7 +5,8 @@ namespace nova {
 	static int main(int argc, char** argv)
 	{
 		try {
-			neo::App app({ argc, argv, NEO_RENDERERAPI_OPENGL }, { 0.12f, 0.12f, 0.18f, 1.0f });
+			inf::Loader::Load(INF_API_VULKAN);
+			neo::App app(argc, argv);
 			app.windows.create_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
 			app.layers.create_layer<MainLayer>(5000);
 			app.run();

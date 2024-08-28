@@ -7,8 +7,7 @@ namespace nova {
 	{
 		m_Input.reset();
 		neo::GetScenes().create_scene<neo::Scene>(50);
-		inf::Loader::Load(inf::RendererAPI::Vulkan);
-		inf::Loader::hello_world();
+		NEO_TRACE_LOG("{} extensions available ", inf::Loader::extension_count());
 	}
 	MainLayer::~MainLayer(void)
 	{
