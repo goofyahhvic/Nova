@@ -10,7 +10,7 @@ namespace nova {
 		MainLayer(int32_t priority, uint8_t state = NEO_LAYERSTATE_ALL);
 		~MainLayer(void);
 	public:
-		void on_event(const neo::Event& e) override;
+		void on_event(neo::Event& e) override;
 		void update(void) override;
 		void draw(void) override;
 	private:

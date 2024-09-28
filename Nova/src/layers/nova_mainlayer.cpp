@@ -6,15 +6,13 @@ namespace nova {
 	: neo::Layer(priority, state)
 	{
 		m_Input.reset();
-		neo::GetScenes().create_scene<neo::Scene>(50);
-		NEO_TRACE_LOG("{} extensions available ", inf::Loader::extension_count());
 	}
 	MainLayer::~MainLayer(void)
 	{
 	
 	}
 
-	void MainLayer::on_event(const neo::Event& e)
+	void MainLayer::on_event(neo::Event& e)
 	{
 		m_Input.on_event(e);
 	}
