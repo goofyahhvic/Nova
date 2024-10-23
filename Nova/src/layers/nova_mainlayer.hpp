@@ -5,16 +5,16 @@
 #include <influx/inf_loader.hpp>
 
 namespace nova {
-	class MainLayer : public neo::Layer {
+	class main_layer_t : public neo::layer_t {
 	public:
-		MainLayer(int32_t priority, uint8_t state = NEO_LAYERSTATE_ALL);
-		~MainLayer(void);
+		main_layer_t(int32_t priority, uint8_t state = NEO_LAYERSTATE_ALL);
+		~main_layer_t(void);
 	public:
-		void on_event(neo::Event& e) override;
+		void on_event(neo::event_t& e) override;
 		void update(void) override;
 		void draw(void) override;
 	private:
-		neo::Input m_Input;
+		neo::input_t m_Input;
 	};
 } // namespace nova
 
