@@ -1,4 +1,6 @@
 #include "nova_pch.hpp"
+
+#include "nova_app.hpp"
 #include "layers/nova_mainlayer.hpp"
 
 namespace nova {
@@ -7,8 +9,8 @@ namespace nova {
 		try {
 			neo::Init({ argc, argv, INF_API_VULKAN });
 			{
-				neo::app_t app;
-				app.add_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
+				nova::app_t app;
+				//app.add_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
 				app.layers.create_layer<main_layer_t>(5000);
 				app.run();
 			}
