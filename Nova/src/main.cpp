@@ -1,31 +1,31 @@
 #include "nova_pch.hpp"
+#include "system_sets/nova_core-system-set.hpp"
 
-#include "nova_app.hpp"
-#include "layers/nova_mainlayer.hpp"
+int main(int argc, char* argv[])
+{
+	using namespace nova;
+	try {
+		neo::app_t app;
 
-namespace nova {
-	static int main(int argc, char** argv)
+		system_set::core_t core(&app);
+		app.add_system(NEO_SYSTEMTYPE_ONEVENT, core.OnEvent);
+
+		app.run();
+	} catch (const std::exception& e)
 	{
-		try {
-			neo::Init({ argc, argv, INF_API_VULKAN });
-			{
-				nova::app_t app;
-				//app.add_window(1280, 720, "Neo-Infused Cybernetic Endeavors");
-				app.layers.create_layer<main_layer_t>(5000);
-				app.run();
-			}
-			neo::Shutdown();
-		} catch (const std::exception& e)
-		{
-			NEO_FATAL_LOG("Exception caught in main: {0}", e.what());
-			return -1;
-		}
-		return 0;
+		NEO_FATAL_LOG("Exception caught in main: {}", e.what());
+		return -1;
 	}
+	return 0;
 }
 
 #if (defined(NEO_PLATFORM_WINDOWS) && defined(NEO_CONFIG_DIST))
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow) { return nova::main(__argc, __argv); }
-#else
-int main(int argc, char* argv[]) { return nova::main(argc, argv); }
-#endif // NEO_PLATFORM_WINDOWS && NEO_CONFIG_DIST
+int APIENTRY WinMain(
+	HINSTANCE hInst,
+	HINSTANCE hInstPrev,
+	PSTR cmdline,
+	int cmdshow)
+{
+	return main(__argc, __argv);
+}
+#endif 
