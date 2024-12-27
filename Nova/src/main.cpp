@@ -16,8 +16,8 @@ int main(int argc, char* argv[])
 		inf::Loader::shader_pipeline_t* pipeline = inf::Loader::create_shader_pipeline(
 			window_surface.native()
 		);
-		uint64_t vertex = inf::Loader::create_shader({ shader_dir / "vertex.glsl", INF_SHADER_STAGE_VERTEX });
-		uint64_t fragment = inf::Loader::create_shader({shader_dir / "fragment.glsl", INF_SHADER_STAGE_FRAGMENT});
+		uint64_t vertex = inf::Loader::create_shader(shader_dir / "vertex.glsl", INF_SHADER_STAGE_VERTEX);
+		uint64_t fragment = inf::Loader::create_shader(shader_dir / "fragment.glsl", INF_SHADER_STAGE_FRAGMENT);
 
 		inf::Loader::attach_shader_to_pipeline(pipeline, vertex);
 		inf::Loader::attach_shader_to_pipeline(pipeline, fragment);
