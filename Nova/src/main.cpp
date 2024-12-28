@@ -1,35 +1,31 @@
 #include "nova_pch.hpp"
 
+static std::filesystem::path ShaderDir(void)
+{
+	return std::filesystem::path(neo::ExecDir() / "../../../NeoInfused/Influx/shaders/").lexically_normal();
+}
+
 int main(int argc, char* argv[])
 {
 	try {
 		neo::app_t app;
 		
-		neo::app::system_set::window_t window_system_set;
-		window_system_set.AddSystems();
+		neo::core_subsystem_t core_subsystem;
 
-		inf::window_surface_t window_surface(&window_system_set.window);
+		neo::window_subsystem_t window_subsystem;
+		window_subsystem.AddSystems();
 
-		std::filesystem::path shader_dir(neo::ExecDir() / "../../../NeoInfused/Influx/shaders/");
-		shader_dir = shader_dir.lexically_normal();
+		inf::renderer_t renderer(window_subsystem.window);
 
-		inf::Loader::shader_pipeline_t* pipeline = inf::Loader::create_shader_pipeline(
-			window_surface.native()
-		);
-		uint64_t vertex = inf::Loader::create_shader(shader_dir / "vertex.glsl", INF_SHADER_STAGE_VERTEX);
-		uint64_t fragment = inf::Loader::create_shader(shader_dir / "fragment.glsl", INF_SHADER_STAGE_FRAGMENT);
+		std::filesystem::path shader_dir = ShaderDir();
 
-		inf::Loader::attach_shader_to_pipeline(pipeline, vertex);
-		inf::Loader::attach_shader_to_pipeline(pipeline, fragment);
+		inf::shader_t vertex(shader_dir / "vertex.glsl", INF_SHADER_STAGE_VERTEX);
+		inf::shader_t fragment(shader_dir / "fragment.glsl", INF_SHADER_STAGE_FRAGMENT);
 
-		inf::Loader::init_shader_pipeline(pipeline);
-
-		inf::Loader::destroy_shader(fragment);
-		inf::Loader::destroy_shader(vertex);
+		renderer.attach_shaders({ vertex.handle, fragment.handle });
+		renderer.init();
 
 		app.run();
-
-		inf::Loader::destroy_shader_pipeline(pipeline);
 	} catch (const std::exception& e)
 	{
 		NEO_FATAL_LOG("Exception caught in main: {}", e.what());
