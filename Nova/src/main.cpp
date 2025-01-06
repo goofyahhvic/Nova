@@ -1,31 +1,20 @@
 #include "nova_pch.hpp"
+#include "nova_game.hpp"
 
-static std::filesystem::path ShaderDir(void)
-{
-	return std::filesystem::path(neo::ExecDir() / "../../../NeoInfused/Influx/shaders/").lexically_normal();
-}
+
 
 int main(int argc, char* argv[])
 {
 	try {
-		neo::app_t app;
-		
-		neo::core_subsystem_t core_subsystem;
+		nova::Game_Create();
+		nova::Game_CreateWindow(1280, 720, "Neo-Infused Cybernetic Endeavors");
+		nova::Game_CreateRenderer();
 
-		neo::window_subsystem_t window_subsystem;
-		window_subsystem.AddSystems();
+		nova::Game_Run();
 
-		inf::renderer_t renderer(window_subsystem.window);
-
-		std::filesystem::path shader_dir = ShaderDir();
-
-		inf::shader_t vertex(shader_dir / "vertex.glsl", INF_SHADER_STAGE_VERTEX);
-		inf::shader_t fragment(shader_dir / "fragment.glsl", INF_SHADER_STAGE_FRAGMENT);
-
-		renderer.attach_shaders({ vertex.handle, fragment.handle });
-		renderer.init();
-
-		app.run();
+		nova::Game_DestroyRenderer();
+		nova::Game_DestroyWindow();
+		nova::Game_Destroy();
 	} catch (const std::exception& e)
 	{
 		NEO_FATAL_LOG("Exception caught in main: {}", e.what());
