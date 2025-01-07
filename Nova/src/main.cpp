@@ -1,23 +1,21 @@
 #include "nova_pch.hpp"
 #include "nova_game.hpp"
 
-
-
 int main(int argc, char* argv[])
 {
 	try {
-		nova::Game_Create();
-		nova::Game_CreateWindow(1280, 720, "Neo-Infused Cybernetic Endeavors");
-		nova::Game_CreateRenderer();
+		Nova::Game_Create();
+		Nova::Game_CreateWindow(1280, 720, "Neo-Infused Cybernetic Endeavors");
+		Nova::Game_CreateRenderer();
 
-		nova::Game_Run();
+		Nova::Game_Run();
 
-		nova::Game_DestroyRenderer();
-		nova::Game_DestroyWindow();
-		nova::Game_Destroy();
+		Nova::Game_DestroyRenderer();
+		Nova::Game_DestroyWindow();
+		Nova::Game_Destroy();
 	} catch (const std::exception& e)
 	{
-		NEO_FATAL_LOG("Exception caught in main: {}", e.what());
+		Neo::g_Logger.fmt(Neo::Fatal, "Exception caught in main: {}", e.what());
 		return -1;
 	}
 	return 0;
