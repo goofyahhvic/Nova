@@ -2,17 +2,33 @@
 #define NOVA_GAME_HPP
 
 #include "NeoInfused/NeoInfused.hpp"
+#undef CreateWindow
 
 namespace Nova {
-	inline Neo::Logger<> g_Logger{"Nova"};
+	inline Neo::Logger<> g_Logger{"Nova", &std::clog};
 
-	void Game_Create(void);
-	void Game_CreateWindow(uint32_t width, uint32_t height, const char* title);
-	void Game_CreateRenderer(void);
-	void Game_Run(void);
-	void Game_DestroyRenderer(void);
-	void Game_DestroyWindow(void);
-	void Game_Destroy(void);
+	struct GameData {
+		Neo::App app;
+		Neo::Window window;
+		Neo::Input input;
+		Influx::Renderer renderer;
+	};
+
+	class Game {
+	public:
+		static void Create(void);
+		static void CreateWindow(uint32_t width, uint32_t height, const std::string_view& title);
+		static void CreateRenderer(void);
+		static void Run(void);
+		static void DestroyRenderer(void);
+		static void DestroyWindow(void);
+		static void Destroy(void);
+	private:
+		static void _OnEvent(Neo::Event& e);
+		static void _Update(double dt);
+	private:
+		static inline GameData* s_Data = nullptr;
+	};
 } // namespace Nova
 
 #endif // NOVA_GAME_HPP

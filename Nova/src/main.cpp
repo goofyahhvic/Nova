@@ -4,15 +4,15 @@
 int main(int argc, char* argv[])
 {
 	try {
-		Nova::Game_Create();
-		Nova::Game_CreateWindow(1280, 720, "Neo-Infused Cybernetic Endeavors");
-		Nova::Game_CreateRenderer();
+		Nova::Game::Create();
+		Nova::Game::CreateWindow(1280u, 720u, "Neo-Infused Cybernetic Endeavors"sv);
+		Nova::Game::CreateRenderer();
 
-		Nova::Game_Run();
+		Nova::Game::Run();
 
-		Nova::Game_DestroyRenderer();
-		Nova::Game_DestroyWindow();
-		Nova::Game_Destroy();
+		Nova::Game::DestroyRenderer();
+		Nova::Game::DestroyWindow();
+		Nova::Game::Destroy();
 	} catch (const std::exception& e)
 	{
 		Neo::g_Logger.fmt(Neo::Fatal, "Exception caught in main: {}", e.what());

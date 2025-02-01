@@ -8,83 +8,74 @@ namespace Nova {
 		return shader_dir;
 	}
 
-	struct Game {
-		Neo::App app;
-		Neo::Window window;
-		Neo::Input input;
-		Influx::Renderer renderer;
-	};
-	Game* game = nullptr;
-
-	void Game_OnEvent(Neo::Event& e);
-	void Game_Update(double dt);
-
-	void Game_Create(void)
+	void Game::Create(void)
 	{
-		if (game)
-			exit(-1);
+		if (!s_Data)
+			s_Data = Neo::tcalloc<GameData>();
 
-		game = Neo::tcalloc<Game>();
-		Neo::InitCore();
+		Neo::InitializeCore();
 
-		new (&game->app) Neo::App();
+		new (&s_Data->app) Neo::App();
 
-		game->app.add_system(Game_Update, Neo::App_SystemType::Update);
-		game->app.add_system(Game_OnEvent, Neo::App_SystemType::OnEvent);
+		s_Data->app.add_system(Game::_Update, Neo::App_SystemType::Update);
+		s_Data->app.add_system(Game::_OnEvent, Neo::App_SystemType::OnEvent);
 
 		g_Logger(Neo::Info, "Hello, world!");
+
+		Influx::Initialize();
 	}
 
-	void Game_CreateWindow(uint32_t width, uint32_t height, const char* title)
+	void Game::CreateWindow(uint32_t width, uint32_t height, const std::string_view& title)
 	{
-		new (&game->window) Neo::Window(width, height, title);
+		new (&s_Data->window) Neo::Window(width, height, title);
 	}
 
-	void Game_CreateRenderer(void)
+	void Game::CreateRenderer(void)
 	{
-		new (&game->renderer) Influx::Renderer(game->window);
+		new (&s_Data->renderer) Influx::Renderer(&s_Data->window);
 
 		Influx::Shader vertex(ShaderDir() / "vertex.glsl", Influx::Shader_Stage::Vertex);
 		Influx::Shader fragment(ShaderDir() / "fragment.glsl", Influx::Shader_Stage::Fragment);
 
-		game->renderer.attach_shaders({ vertex, fragment });
-		game->renderer.init();
+		s_Data->renderer.attach_shaders({ vertex, fragment });
+		s_Data->renderer.init();
 	}
 
-	void Game_OnEvent(Neo::Event& e)
+	void Game::_OnEvent(Neo::Event& e)
 	{
-		game->input.on_event(e);
+		s_Data->input.on_event(e);
 		if (e.type == Neo::Event_Type::WindowClosed)
-			game->app.should_close = true;
+			s_Data->app.should_close = true;
 	}
 
-	void Game_Update(double dt)
+	void Game::_Update(double dt)
 	{
 		g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
 	}
 
-	void Game_Run(void)
+	void Game::Run(void)
 	{
-		game->app.run();
+		s_Data->app.run();
 	}
 
-	void Game_DestroyRenderer(void)
+	void Game::DestroyRenderer(void)
 	{
-		game->renderer.~Renderer();
+		s_Data->renderer.~Renderer();
 	}
 
-	void Game_DestroyWindow(void)
+	void Game::DestroyWindow(void)
 	{
-		game->window.~Window();
+		s_Data->window.~Window();
 	}
 
-	void Game_Destroy(void)
+	void Game::Destroy(void)
 	{
-		Game_DestroyRenderer();
-		Game_DestroyWindow();
+		Game::DestroyRenderer();
+		Game::DestroyWindow();
 
-		game->app.~App();
+		s_Data->app.~App();
+		Influx::Shutdown();
 		Neo::ShutdownCore();
-		Neo::free(game);
+		Neo::free(s_Data);
 	}
 } // namespace Nova
