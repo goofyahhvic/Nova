@@ -17,8 +17,8 @@ namespace Nova {
 
 		new (&s_Data->app) Neo::App();
 
-		s_Data->app.add_system(Game::_Update, Neo::App_SystemType::Update);
-		s_Data->app.add_system(Game::_OnEvent, Neo::App_SystemType::OnEvent);
+		s_Data->app.add_system((void*)Game::_Update, Neo::App_SystemType::Update);
+		s_Data->app.add_system((void*)Game::_OnEvent, Neo::App_SystemType::OnEvent);
 
 		g_Logger(Neo::Info, "Hello, world!");
 
@@ -50,7 +50,7 @@ namespace Nova {
 
 	void Game::_Update(double dt)
 	{
-		g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
+		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
 	}
 
 	void Game::Run(void)
