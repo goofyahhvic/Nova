@@ -32,7 +32,7 @@ namespace Nova {
 
 	void Game::CreateRenderer(void)
 	{
-		new (&s_Data->renderer) Influx::Renderer(&s_Data->window);
+		new (&s_Data->renderer) Influx::Renderer(s_Data->window.native());
 
 		Influx::Shader vertex(ShaderDir() / "vertex.glsl", Influx::Shader_Stage::Vertex);
 		Influx::Shader fragment(ShaderDir() / "fragment.glsl", Influx::Shader_Stage::Fragment);
