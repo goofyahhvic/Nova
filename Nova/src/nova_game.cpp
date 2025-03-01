@@ -51,6 +51,9 @@ namespace Nova {
 	void Game::_Update(double dt)
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
+		s_Data->renderer.clear({ 0.15f, 0.15f, 0.2f, 1.0f });
+
+		s_Data->renderer.present();
 	}
 
 	void Game::Run(void)
