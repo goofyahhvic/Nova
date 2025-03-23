@@ -44,13 +44,22 @@ namespace Nova {
 	void Game::_OnEvent(Neo::Event& e)
 	{
 		s_Data->input.on_event(e);
-		if (e.type == Neo::Event_Type::WindowClosed)
+		switch (e.type)
+		{
+		case Neo::Event_Type::WindowClosed:
 			s_Data->app.should_close = true;
+			break;
+		case Neo::Event_Type::WindowResized:
+			s_Data->renderer.update_size();
+			break;
+		}
 	}
 
 	void Game::_Update(double dt)
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
+		
+		//s_Data->renderer.set_viewport({ 0.0f, 0.0f, (float)s_Data->window.width(), (float)s_Data->window.height()});
 		s_Data->renderer.clear({ 0.15f, 0.15f, 0.2f, 1.0f });
 
 		s_Data->renderer.present();
