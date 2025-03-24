@@ -12,6 +12,9 @@ namespace Nova {
 		Neo::Window window;
 		Neo::Input input;
 		Influx::Renderer renderer;
+		Influx::Pipeline pipeline;
+
+		Influx::VertexBuffer vbo1, vbo2, vbo3;
 	};
 
 	class Game {

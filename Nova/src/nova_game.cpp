@@ -30,6 +30,32 @@ namespace Nova {
 		new (&s_Data->window) Neo::Window(width, height, title);
 	}
 
+	struct Vertex {
+		glm::vec2 pos;
+		glm::vec4 color;
+	};
+
+	Vertex VBO1[3] = {
+		{ { 0.0f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
+		{ { 0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
+		{ {-0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+	};
+
+	Vertex VBO2[6] = {
+		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
+		{ { 0.5f, -0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
+		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } },
+		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
+		{ {-0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
+		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+	};
+
+	Vertex VBO3[3] = {
+		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
+		{ {-0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
+		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+	};
+
 	void Game::CreateRenderer(void)
 	{
 		new (&s_Data->renderer) Influx::Renderer(s_Data->window.native());
@@ -37,8 +63,19 @@ namespace Nova {
 		Influx::Shader vertex(ShaderDir() / "vertex.glsl", Influx::Shader_Stage::Vertex);
 		Influx::Shader fragment(ShaderDir() / "fragment.glsl", Influx::Shader_Stage::Fragment);
 
-		s_Data->renderer.attach_shaders({ vertex, fragment });
-		s_Data->renderer.init();
+		new (&s_Data->pipeline) Influx::Pipeline(
+			s_Data->renderer,
+			{ vertex, fragment },
+			{
+				{ 0, Influx::VertexAttribute_Type::Vec2 },
+				{ 1, Influx::VertexAttribute_Type::Vec4 }
+			}
+		);
+		s_Data->renderer.bind_pipeline(s_Data->pipeline);
+
+		new (&s_Data->vbo1) Influx::VertexBuffer(VBO1, 3, sizeof(Vertex));
+		new (&s_Data->vbo2) Influx::VertexBuffer(VBO2, 6, sizeof(Vertex));
+		new (&s_Data->vbo3) Influx::VertexBuffer(VBO3, 3, sizeof(Vertex));
 	}
 
 	void Game::_OnEvent(Neo::Event& e)
@@ -55,6 +92,7 @@ namespace Nova {
 		}
 	}
 
+	static uint32_t buffer = 1;
 	void Game::_Update(double dt)
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
@@ -62,6 +100,10 @@ namespace Nova {
 		//s_Data->renderer.set_viewport({ 0.0f, 0.0f, (float)s_Data->window.width(), (float)s_Data->window.height()});
 		s_Data->renderer.clear({ 0.15f, 0.15f, 0.2f, 1.0f });
 
+		VBO1[0].pos.y = s_Data->window.height() / s_Data->input.mouse_y();
+		//s_Data->vbo1.set_memory(VBO1);
+
+		s_Data->renderer.bind_vbo(s_Data->vbo1);
 		s_Data->renderer.present();
 	}
 
@@ -72,6 +114,10 @@ namespace Nova {
 
 	void Game::DestroyRenderer(void)
 	{
+		s_Data->vbo3.~VertexBuffer();
+		s_Data->vbo2.~VertexBuffer();
+		s_Data->vbo1.~VertexBuffer();
+		s_Data->pipeline.~Pipeline();
 		s_Data->renderer.~Renderer();
 	}
 
@@ -88,6 +134,7 @@ namespace Nova {
 		s_Data->app.~App();
 		Influx::Shutdown();
 		Neo::ShutdownCore();
-		Neo::free(s_Data);
+		free(s_Data);
+		s_Data = nullptr;
 	}
 } // namespace Nova
