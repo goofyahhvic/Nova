@@ -73,9 +73,9 @@ namespace Nova {
 		);
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
-		new (&s_Data->vbo1) Influx::VertexBuffer(VBO1, 3, sizeof(Vertex));
-		new (&s_Data->vbo2) Influx::VertexBuffer(VBO2, 6, sizeof(Vertex));
-		new (&s_Data->vbo3) Influx::VertexBuffer(VBO3, 3, sizeof(Vertex));
+		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 3, sizeof(Vertex));
+		new (&s_Data->vbo2) Influx::VertexBuffer(s_Data->renderer, VBO2, 6, sizeof(Vertex));
+		new (&s_Data->vbo3) Influx::VertexBuffer(s_Data->renderer, VBO3, 3, sizeof(Vertex));
 	}
 
 	void Game::_OnEvent(Neo::Event& e)
