@@ -14,7 +14,8 @@ namespace Nova {
 		Influx::Renderer renderer;
 		Influx::Pipeline pipeline;
 
-		Influx::VertexBuffer vbo1, vbo2, vbo3;
+		Influx::VertexBuffer vbo1;
+		Influx::IndexBuffer ibo1;
 	};
 
 	class Game {

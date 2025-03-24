@@ -5,7 +5,7 @@ int main(int argc, char* argv[])
 {
 	try {
 		Nova::Game::Create();
-		Nova::Game::CreateWindow(1280u, 720u, "Neo-Infused Cybernetic Endeavors"sv);
+		Nova::Game::CreateWindow(720u, 720u, "Neo-Infused Cybernetic Endeavors"sv);
 		Nova::Game::CreateRenderer();
 
 		Nova::Game::Run();

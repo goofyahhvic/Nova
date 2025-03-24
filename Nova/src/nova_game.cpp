@@ -41,13 +41,15 @@ namespace Nova {
 		{ {-0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
 	};
 
-	Vertex VBO2[6] = {
+	Vertex VBO2[4] = {
 		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
-		{ { 0.5f, -0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
+		{ { 0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } },
 		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } },
-		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
-		{ {-0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
-		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+		{ {-0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } }
+	};
+
+	uint32_t IBO[6] = {
+		0, 1, 2, 2, 3, 0
 	};
 
 	Vertex VBO3[3] = {
@@ -73,9 +75,8 @@ namespace Nova {
 		);
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
-		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 3, sizeof(Vertex));
-		new (&s_Data->vbo2) Influx::VertexBuffer(s_Data->renderer, VBO2, 6, sizeof(Vertex));
-		new (&s_Data->vbo3) Influx::VertexBuffer(s_Data->renderer, VBO3, 3, sizeof(Vertex));
+		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO2, 4, sizeof(Vertex));
+		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO, 6);
 	}
 
 	void Game::_OnEvent(Neo::Event& e)
@@ -103,7 +104,7 @@ namespace Nova {
 		VBO1[0].pos.y = s_Data->window.height() / s_Data->input.mouse_y();
 		//s_Data->vbo1.set_memory(VBO1);
 
-		s_Data->renderer.bind_vbo(s_Data->vbo1);
+		s_Data->ibo1.draw(s_Data->renderer, s_Data->vbo1);
 		s_Data->renderer.present();
 	}
 
@@ -114,8 +115,7 @@ namespace Nova {
 
 	void Game::DestroyRenderer(void)
 	{
-		s_Data->vbo3.~VertexBuffer();
-		s_Data->vbo2.~VertexBuffer();
+		s_Data->ibo1.~IndexBuffer();
 		s_Data->vbo1.~VertexBuffer();
 		s_Data->pipeline.~Pipeline();
 		s_Data->renderer.~Renderer();
