@@ -1,6 +1,9 @@
 #include "nova_pch.hpp"
 #include "nova_game.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
 namespace Nova {
 	static const std::filesystem::path& ShaderDir(void)
 	{
@@ -31,31 +34,61 @@ namespace Nova {
 	}
 
 	struct Vertex {
-		glm::vec2 pos;
-		glm::vec4 color;
+		glm::vec3 pos;
+		glm::vec3 color;
 	};
 
-	Vertex VBO1[3] = {
-		{ { 0.0f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
-		{ { 0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
-		{ {-0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+	struct UniformBufferObject {
+		alignas(16) glm::mat4 model;
+		alignas(16) glm::mat4 view;
+		alignas(16) glm::mat4 proj;
 	};
 
-	Vertex VBO2[4] = {
-		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
-		{ { 0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } },
-		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } },
-		{ {-0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } }
+	Vertex VBO1[] = 
+	{
+		{ { 0.5f,  0.5f, 0.0f}, { 0.2f, 0.9f, 0.2f } },
+		{ { 0.5f, -0.5f, 0.0f}, { 0.9f, 0.2f, 0.2f } },
+		{ {-0.5f, -0.5f, 0.0f}, { 0.2f, 0.2f, 0.9f } },
+		{ {-0.5f,  0.5f, 0.0f}, { 0.2f, 0.2f, 0.9f } }
 	};
 
-	uint32_t IBO[6] = {
-		0, 1, 2, 2, 3, 0
+	uint32_t IBO2[] = 
+	{
+		0, 1, 2,
+		2, 3, 0
 	};
 
-	Vertex VBO3[3] = {
-		{ {-0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f, 1.0f } },
-		{ {-0.5f,  0.5f}, { 0.2f, 0.9f, 0.2f, 1.0f } },
-		{ { 0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f, 1.0f } }
+	Vertex VBO2[8] = {
+		{ {-0.5f, -0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f } }, // 01 45
+		{ { 0.5f, -0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f } }, // 32 76
+		{ { 0.5f,  0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f } }, // 
+		{ {-0.5f,  0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f } }, //
+		{ {-0.5f, -0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f } }, //
+		{ { 0.5f, -0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f } }, //
+		{ { 0.5f,  0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f } }, //
+		{ {-0.5f,  0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f } }  //
+	};
+
+	uint32_t IBO[6 * 3 * 2] = {
+		// Front
+		0, 1, 2,
+		2, 3, 0,
+
+		// Top
+		0, 1, 4,
+		4, 5, 0,
+
+		// Right
+		1, 2, 5,
+		5, 6, 1,
+
+		// Left
+		0, 3, 4,
+		4, 7, 0,
+
+		// Bottom
+		2, 3, 6,
+		6, 7, 2
 	};
 
 	void Game::CreateRenderer(void)
@@ -69,14 +102,18 @@ namespace Nova {
 			s_Data->renderer,
 			{ vertex, fragment },
 			{
-				{ 0, Influx::VertexAttribute_Type::Vec2 },
-				{ 1, Influx::VertexAttribute_Type::Vec4 }
+				Influx::VertexAttribute{ 0, Influx::VertexAttribute_Type::Vec3 },
+				Influx::VertexAttribute{ 1, Influx::VertexAttribute_Type::Vec3 }
+			},
+			{
+				Influx::DescriptorBinding{ 0, Influx::DescriptorBinding_Type::UniformBuffer, 1, Influx::Shader_Stage::Vertex }
 			}
 		);
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
-		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO2, 4, sizeof(Vertex));
-		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO, 6);
+		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 4, sizeof(Vertex));
+		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO2, 6);
+		new (&s_Data->ubo1) Influx::UniformBuffer(s_Data->renderer, sizeof(UniformBufferObject), 0);
 	}
 
 	void Game::_OnEvent(Neo::Event& e)
@@ -93,17 +130,41 @@ namespace Nova {
 		}
 	}
 
-	static uint32_t buffer = 1;
 	void Game::_Update(double dt)
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
-		
-		//s_Data->renderer.set_viewport({ 0.0f, 0.0f, (float)s_Data->window.width(), (float)s_Data->window.height()});
-		s_Data->renderer.clear({ 0.15f, 0.15f, 0.2f, 1.0f });
 
-		VBO1[0].pos.y = s_Data->window.height() / s_Data->input.mouse_y();
-		//s_Data->vbo1.set_memory(VBO1);
+		UniformBufferObject ubo{};
 
+		float angle = fmod(
+			(float)dt * glm::radians(90.0f),
+			glm::two_pi<float>()
+		);
+		ubo.model = glm::rotate(
+			glm::mat4(1.0f),
+			angle,
+			glm::vec3(0.0f, 0.0f, 1.0f)
+		);
+
+		ubo.view = glm::lookAt(
+			glm::vec3(2.0f, 2.0f, 2.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 0.0f, 1.0f)
+		);
+
+		ubo.proj = glm::perspective(
+			glm::radians(45.0f),
+			s_Data->renderer.width() / (float)s_Data->renderer.height(),
+			0.1f,
+			10.0f
+		);
+		ubo.proj[1][1] *= -1; 
+
+		s_Data->ubo1.update((void*)&ubo, s_Data->renderer);
+
+		s_Data->renderer.clear({ 0.11f, 0.11f, 0.13f, 1.0f });
+
+		s_Data->renderer.bind_ubo(s_Data->ubo1);
 		s_Data->ibo1.draw(s_Data->renderer, s_Data->vbo1);
 		s_Data->renderer.present();
 	}
@@ -115,6 +176,7 @@ namespace Nova {
 
 	void Game::DestroyRenderer(void)
 	{
+		s_Data->ubo1.~UniformBuffer();
 		s_Data->ibo1.~IndexBuffer();
 		s_Data->vbo1.~VertexBuffer();
 		s_Data->pipeline.~Pipeline();
