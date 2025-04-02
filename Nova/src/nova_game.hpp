@@ -11,6 +11,7 @@ namespace Nova {
 		Neo::App app;
 		Neo::Window window;
 		Neo::Input input;
+
 		Influx::Renderer renderer;
 		Influx::Pipeline pipeline;
 

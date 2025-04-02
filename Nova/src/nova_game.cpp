@@ -134,6 +134,11 @@ namespace Nova {
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
 
+		static auto startTime = std::chrono::high_resolution_clock::now();
+
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		dt = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
 		UniformBufferObject ubo{};
 
 		float angle = fmod(
@@ -159,6 +164,14 @@ namespace Nova {
 			10.0f
 		);
 		ubo.proj[1][1] *= -1; 
+
+		static uint32_t logged = 0;
+		if (logged < 3)
+		{
+			logged++;
+			g_Logger.fmt(Neo::Trace, "view: {}", glm::to_string(ubo.view));
+			g_Logger.fmt(Neo::Trace, "proj: {}", glm::to_string(ubo.proj));
+		}
 
 		s_Data->ubo1.update((void*)&ubo, s_Data->renderer);
 
