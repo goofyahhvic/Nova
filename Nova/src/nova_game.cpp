@@ -165,6 +165,9 @@ namespace Nova {
 		);
 		ubo.proj[1][1] *= -1; 
 
+		//ubo.view = glm::mat4(1.0f);
+		//ubo.proj = glm::mat4(1.0f);
+
 		static uint32_t logged = 0;
 		if (logged < 3)
 		{
