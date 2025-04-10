@@ -16,7 +16,7 @@ namespace Nova {
 		if (!s_Data)
 			s_Data = Neo::tcalloc<GameData>();
 
-		Neo::InitializeCore();
+		Neo::InitializeCore(Influx::RendererApi::Vulkan);
 
 		new (&s_Data->app) Neo::App();
 
@@ -43,52 +43,42 @@ namespace Nova {
 		alignas(16) glm::mat4 view;
 		alignas(16) glm::mat4 proj;
 	};
+	Vertex VBO1[] = {
+		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.7f, 0.2f, 0.7f), }, 
+		{ glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.2f, 0.2f, 0.7f), }, 
+		{ glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(0.2f, 0.7f, 0.2f), }, 
+		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.2f, 0.7f, 0.7f), }, 
+		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.2f), },
+		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.7f), },
+		{ glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(0.7f, 0.7f, 0.2f), }, 
+		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.7f)  } 
+	};
 
-	Vertex VBO1[] = 
+	uint32_t IBO1[] = 
 	{
-		{ { 0.5f,  0.5f, 0.0f}, { 0.2f, 0.9f, 0.2f } },
-		{ { 0.5f, -0.5f, 0.0f}, { 0.9f, 0.2f, 0.2f } },
-		{ {-0.5f, -0.5f, 0.0f}, { 0.2f, 0.2f, 0.9f } },
-		{ {-0.5f,  0.5f, 0.0f}, { 0.2f, 0.2f, 0.9f } }
-	};
+		// Front face (0, 1, 2, 3)
+	0, 1, 2,
+	2, 3, 0,
 
-	uint32_t IBO2[] = 
-	{
-		0, 1, 2,
-		2, 3, 0
-	};
+	// Back face (4, 5, 6, 7)
+	5, 4, 7,
+	7, 6, 5,
 
-	Vertex VBO2[8] = {
-		{ {-0.5f, -0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f } }, // 01 45
-		{ { 0.5f, -0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f } }, // 32 76
-		{ { 0.5f,  0.5f,  0.5f}, { 0.2f, 0.2f, 0.9f } }, // 
-		{ {-0.5f,  0.5f,  0.5f}, { 0.9f, 0.2f, 0.2f } }, //
-		{ {-0.5f, -0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f } }, //
-		{ { 0.5f, -0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f } }, //
-		{ { 0.5f,  0.5f, -0.5f}, { 0.2f, 0.2f, 0.9f } }, //
-		{ {-0.5f,  0.5f, -0.5f}, { 0.9f, 0.2f, 0.2f } }  //
-	};
+	// Left face (4, 0, 3, 7)
+	4, 0, 3,
+	3, 7, 4,
 
-	uint32_t IBO[6 * 3 * 2] = {
-		// Front
-		0, 1, 2,
-		2, 3, 0,
+	// Right face (1, 5, 6, 2)
+	1, 5, 6,
+	6, 2, 1,
 
-		// Top
-		0, 1, 4,
-		4, 5, 0,
+	// Top face (3, 2, 6, 7)
+	3, 2, 6,
+	6, 7, 3,
 
-		// Right
-		1, 2, 5,
-		5, 6, 1,
-
-		// Left
-		0, 3, 4,
-		4, 7, 0,
-
-		// Bottom
-		2, 3, 6,
-		6, 7, 2
+	// Bottom face (0, 4, 5, 1)
+	0, 4, 5,
+	5, 1, 0
 	};
 
 	void Game::CreateRenderer(void)
@@ -111,8 +101,8 @@ namespace Nova {
 		);
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
-		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 4, sizeof(Vertex));
-		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO2, 6);
+		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 8, sizeof(Vertex));
+		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO1, 36);
 		new (&s_Data->ubo1) Influx::UniformBuffer(s_Data->renderer, sizeof(UniformBufferObject), 0);
 	}
 
@@ -137,22 +127,18 @@ namespace Nova {
 		static auto startTime = std::chrono::high_resolution_clock::now();
 
 		auto currentTime = std::chrono::high_resolution_clock::now();
-		dt = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 		UniformBufferObject ubo{};
 
-		float angle = fmod(
-			(float)dt * glm::radians(90.0f),
-			glm::two_pi<float>()
-		);
 		ubo.model = glm::rotate(
 			glm::mat4(1.0f),
-			angle,
+			time * glm::radians(90.0f),
 			glm::vec3(0.0f, 0.0f, 1.0f)
 		);
 
 		ubo.view = glm::lookAt(
-			glm::vec3(2.0f, 2.0f, 2.0f),
+			glm::vec3(2.5f, 2.5f, 2.5f),
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 0.0f, 1.0f)
 		);
@@ -164,17 +150,6 @@ namespace Nova {
 			10.0f
 		);
 		ubo.proj[1][1] *= -1; 
-
-		//ubo.view = glm::mat4(1.0f);
-		//ubo.proj = glm::mat4(1.0f);
-
-		static uint32_t logged = 0;
-		if (logged < 3)
-		{
-			logged++;
-			g_Logger.fmt(Neo::Trace, "view: {}", glm::to_string(ubo.view));
-			g_Logger.fmt(Neo::Trace, "proj: {}", glm::to_string(ubo.proj));
-		}
 
 		s_Data->ubo1.update((void*)&ubo, s_Data->renderer);
 

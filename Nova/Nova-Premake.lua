@@ -1,5 +1,6 @@
 NEOINFUSED = "../NeoInfused"
 INFLUX_VK_BIN = "../bin/%{OUTPUT_DIR}/Influx-vk/Influx-vk-bin"
+--INFLUX_GL_BIN = "../bin/%{OUTPUT_DIR}/Influx-gl/Influx-gl-bin"
 
 project "Nova"
     location "./"
