@@ -25,11 +25,13 @@ project "Nova"
         "%{NEOINFUSED}/include/",
         "%{NEOINFUSED}/%{INCLUDE_DIR.GLFW}",
         "%{NEOINFUSED}/%{INCLUDE_DIR.glm}",
-        "%{NEOINFUSED}/%{INCLUDE_DIR.inf}"
+        "%{NEOINFUSED}/%{INCLUDE_DIR.inf}",
+        "%{NEOINFUSED}/%{INCLUDE_DIR.stb}"
     }
     links {
         "NeoInfused",
         "GLFW",
+        "stb",
         "InfluxRenderer"
     }
 
