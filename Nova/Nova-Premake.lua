@@ -23,6 +23,7 @@ project "Nova"
     includedirs {
         "src/",
         "%{NEOINFUSED}/include/",
+        "%{NEOINFUSED}/%{INCLUDE_DIR.fmt}",
         "%{NEOINFUSED}/%{INCLUDE_DIR.GLFW}",
         "%{NEOINFUSED}/%{INCLUDE_DIR.glm}",
         "%{NEOINFUSED}/%{INCLUDE_DIR.inf}",
@@ -51,18 +52,22 @@ project "Nova"
             ("{COPY} %{INFLUX_VK_BIN}.dll ../bin/%{OUTPUT_DIR}/Nova/")
         }
 
+        buildoptions {
+            "/utf-8"
+        }
+
     filter "configurations:dbg"
         symbols "On"
         runtime "Debug"
         defines { "NEO_CONFIG_DEBUG" }
+
     filter "configurations:rel"
         optimize "speed"
         symbols "off"
-        runtime "Release"
         defines { "NEO_CONFIG_RELEASE" }
+
     filter "configurations:dist"
         kind "WindowedApp"
         optimize "speed"
         symbols "off"
-        runtime "Release"
         defines { "NEO_CONFIG_DIST" }
