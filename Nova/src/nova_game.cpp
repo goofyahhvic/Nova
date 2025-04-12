@@ -104,6 +104,12 @@ namespace Nova {
 		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 8, sizeof(Vertex));
 		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO1, 36);
 		new (&s_Data->ubo1) Influx::UniformBuffer(s_Data->renderer, sizeof(UniformBufferObject), 0);
+
+		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "schlatt.jpg");
+		if (!img)
+			Nova::g_Logger(Neo::Error, "Ah shucks");
+
+		img.destroy();
 	}
 
 	void Game::_OnEvent(Neo::Event& e)
