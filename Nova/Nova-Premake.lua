@@ -31,9 +31,10 @@ project "Nova"
     }
     links {
         "NeoInfused",
+        "InfluxRenderer",
+        "fmt",
         "GLFW",
         "stb",
-        "InfluxRenderer"
     }
 
     filter "system:linux"
