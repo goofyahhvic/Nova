@@ -18,6 +18,8 @@ namespace Nova {
 		Influx::VertexBuffer vbo1;
 		Influx::IndexBuffer ibo1;
 		Influx::UniformBuffer ubo1;
+
+		Influx::Texture texture;
 	};
 
 	class Game {

@@ -107,7 +107,13 @@ namespace Nova {
 
 		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "schlatt.jpg");
 		if (!img)
-			Nova::g_Logger(Neo::Error, "Ah shucks");
+			Nova::g_Logger.fmt(
+				Neo::Error,
+				"Failed to load {}",
+					(Neo::ExecDir() / "schlatt.jpg").C_STR()
+			);
+
+		new (&s_Data->texture) Influx::Texture(img, s_Data->renderer);
 
 		img.destroy();
 	}
@@ -173,16 +179,19 @@ namespace Nova {
 
 	void Game::DestroyRenderer(void)
 	{
-		s_Data->ubo1.~UniformBuffer();
-		s_Data->ibo1.~IndexBuffer();
-		s_Data->vbo1.~VertexBuffer();
-		s_Data->pipeline.~Pipeline();
-		s_Data->renderer.~Renderer();
+		s_Data->ubo1.destroy();
+		s_Data->ibo1.destroy();
+		s_Data->vbo1.destroy();
+
+		s_Data->pipeline.destroy();
+		s_Data->renderer.destroy();
+
+		s_Data->texture.destroy();
 	}
 
 	void Game::DestroyWindow(void)
 	{
-		s_Data->window.~Window();
+		s_Data->window.destroy();
 	}
 
 	void Game::Destroy(void)
