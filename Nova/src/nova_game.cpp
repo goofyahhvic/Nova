@@ -36,6 +36,7 @@ namespace Nova {
 	struct Vertex {
 		glm::vec3 pos;
 		glm::vec3 color;
+		glm::vec2 tex_coord;
 	};
 
 	struct UniformBufferObject {
@@ -44,41 +45,62 @@ namespace Nova {
 		alignas(16) glm::mat4 proj;
 	};
 	Vertex VBO1[] = {
-		{ glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.7f, 0.2f, 0.7f), }, 
-		{ glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec3(0.2f, 0.2f, 0.7f), }, 
-		{ glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec3(0.2f, 0.7f, 0.2f), }, 
-		{ glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.2f, 0.7f, 0.7f), }, 
-		{ glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.2f), },
-		{ glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.7f), },
-		{ glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec3(0.7f, 0.7f, 0.2f), }, 
-		{ glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.7f, 0.2f, 0.7f)  } 
+		{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, }, // 0
+		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, }, // 1
+		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, }, // 2
+		{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, }, // 3
+
+		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }, }, // 4
+		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, }, // 5
+		{ { -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, }, // 6
+		{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 1.0f }, }, // 7
+
+		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 0.0f }, }, // 8
+		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f }, }, // 9
+		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, }, // 10
+		{ { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, }, // 11
+
+		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }, }, // 12
+		{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, }, // 13
+		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, }, // 14
+		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f }, }, // 15
+
+		{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, }, // 16
+		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, }, // 17
+		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 0.0f }, }, // 18
+		{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 0.0f }, }, // 19
+
+		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, }, // 20
+		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, }, // 21
+		{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }, }, // 22
+		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }  } // 23
 	};
 
 	uint32_t IBO1[] = 
 	{
 		// Front face (0, 1, 2, 3)
-	0, 1, 2,
-	2, 3, 0,
+		0, 1, 2,
+		2, 3, 0,
 
-	// Back face (4, 5, 6, 7)
-	5, 4, 7,
-	7, 6, 5,
+		// Back face (4, 5, 6, 7)
+		4, 5, 6,
+		6, 7, 4,
 
-	// Left face (4, 0, 3, 7)
-	4, 0, 3,
-	3, 7, 4,
+		// Left face (8, 9, 10, 11)
+		8, 9, 10,
+		10, 11, 8,
 
-	// Right face (1, 5, 6, 2)
-	1, 5, 6,
-	6, 2, 1,
+		// Right face (12, 13, 14, 15)
+		12, 13, 14,
+		14, 15, 12,
 
-	// Top face (3, 2, 6, 7)
-	3, 2, 6,
-	6, 7, 3,
+		// Top face (16, 17, 18, 19)
+		16, 17, 18,
+		18, 19, 16,
 
-	// Bottom face (0, 4, 5, 1)
-	0, 4, 5,
-	5, 1, 0
+		// Bottom face (20, 21, 22, 23)
+		20, 21, 22,
+		22, 23, 20
 	};
 
 	void Game::CreateRenderer(void)
@@ -92,25 +114,51 @@ namespace Nova {
 			s_Data->renderer,
 			{ vertex, fragment },
 			{
-				Influx::VertexAttribute{ 0, Influx::VertexAttribute_Type::Vec3 },
-				Influx::VertexAttribute{ 1, Influx::VertexAttribute_Type::Vec3 }
+				Influx::VertexAttribute{
+					0, // location
+					Influx::VertexAttribute_Type::Vec3
+				},
+				Influx::VertexAttribute{
+					1, // location
+					Influx::VertexAttribute_Type::Vec3
+				},
+				Influx::VertexAttribute{
+					2, // location
+					Influx::VertexAttribute_Type::Vec2
+				}
 			},
 			{
-				Influx::DescriptorBinding{ 0, Influx::DescriptorBinding_Type::UniformBuffer, 1, Influx::Shader_Stage::Vertex }
+				Influx::DescriptorBinding{
+					0, // location
+					Influx::DescriptorBinding_Type::UniformBuffer,
+					1, // count
+					Influx::Shader_Stage::Vertex
+				},
+				Influx::DescriptorBinding{
+					1, // location
+					Influx::DescriptorBinding_Type::TextureSampler,
+					1, // count
+					Influx::Shader_Stage::Fragment
+				}
 			}
 		);
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
-		new (&s_Data->vbo1) Influx::VertexBuffer(s_Data->renderer, VBO1, 8, sizeof(Vertex));
+		new (&s_Data->vbo1) Influx::VertexBuffer(
+			s_Data->renderer,
+			VBO1,
+			sizeof(VBO1) / sizeof(Vertex),
+			sizeof(Vertex)
+		);
 		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO1, 36);
 		new (&s_Data->ubo1) Influx::UniformBuffer(s_Data->renderer, sizeof(UniformBufferObject), 0);
 
-		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "schlatt.jpg");
+		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "tex.png");
 		if (!img)
 			Nova::g_Logger.fmt(
 				Neo::Error,
 				"Failed to load {}",
-					(Neo::ExecDir() / "schlatt.jpg").C_STR()
+					(Neo::ExecDir() / "tex.png").C_STR()
 			);
 
 		new (&s_Data->texture) Influx::Texture(img, s_Data->renderer);
