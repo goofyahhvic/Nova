@@ -35,7 +35,6 @@ namespace Nova {
 
 	struct Vertex {
 		glm::vec3 pos;
-		glm::vec3 color;
 		glm::vec2 tex_coord;
 	};
 
@@ -45,35 +44,35 @@ namespace Nova {
 		alignas(16) glm::mat4 proj;
 	};
 	Vertex VBO1[] = {
-		{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, }, // 0
-		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, }, // 1
-		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, }, // 2
-		{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, }, // 3
+		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f } }, // 0
+		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f } }, // 1
+		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f } }, // 2
+		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f } }, // 3
 
-		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }, }, // 4
-		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, }, // 5
-		{ { -0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, }, // 6
-		{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 1.0f }, }, // 7
+		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f } }, // 4
+		{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } }, // 5
+		{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f } }, // 6
+		{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f } }, // 7
 
-		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 0.0f }, }, // 8
-		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 0.0f }, }, // 9
-		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, }, // 10
-		{ { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, }, // 11
+		{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } }, // 8
+		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f } }, // 9
+		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f } }, // 10
+		{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f } }, // 11
 
-		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f }, { 0.0f, 0.0f }, }, // 12
-		{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f }, { 1.0f, 0.0f }, }, // 13
-		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f }, }, // 14
-		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f }, }, // 15
+		{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f } }, // 12
+		{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } }, // 13
+		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 1.0f } }, // 14
+		{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f } }, // 15
 
-		{ { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f }, }, // 16
-		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 1.0f }, }, // 17
-		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f }, { 1.0f, 0.0f }, }, // 18
-		{ { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f }, { 0.0f, 0.0f }, }, // 19
+		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f } }, // 16
+		{ {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f } }, // 17
+		{ {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f } }, // 18
+		{ { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f } }, // 19
 
-		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f }, { 0.0f, 0.0f }, }, // 20
-		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 0.0f }, }, // 21
-		{ {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 1.0f }, }, // 22
-		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f, 1.0f }, { 0.0f, 1.0f }  } // 23
+		{ { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f } }, // 20
+		{ {  0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } }, // 21
+		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f } }, // 22
+		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f } }  // 23
 	};
 
 	uint32_t IBO1[] = 
@@ -114,29 +113,25 @@ namespace Nova {
 			s_Data->renderer,
 			{ vertex, fragment },
 			{
-				Influx::VertexAttribute{
+				Influx::ShaderAttribute{
 					0, // location
-					Influx::VertexAttribute_Type::Vec3
+					Influx::ShaderAttribute_Type::Vec3
 				},
-				Influx::VertexAttribute{
+				Influx::ShaderAttribute{
 					1, // location
-					Influx::VertexAttribute_Type::Vec3
-				},
-				Influx::VertexAttribute{
-					2, // location
-					Influx::VertexAttribute_Type::Vec2
+					Influx::ShaderAttribute_Type::Vec2
 				}
 			},
 			{
-				Influx::DescriptorBinding{
+				Influx::ShaderUniform{
 					0, // location
-					Influx::DescriptorBinding_Type::UniformBuffer,
+					Influx::ShaderUniform_Type::Buffer,
 					1, // count
 					Influx::Shader_Stage::Vertex
 				},
-				Influx::DescriptorBinding{
+				Influx::ShaderUniform{
 					1, // location
-					Influx::DescriptorBinding_Type::TextureSampler,
+					Influx::ShaderUniform_Type::TextureSampler,
 					1, // count
 					Influx::Shader_Stage::Fragment
 				}
@@ -145,13 +140,14 @@ namespace Nova {
 		s_Data->renderer.bind_pipeline(s_Data->pipeline);
 
 		new (&s_Data->vbo1) Influx::VertexBuffer(
-			s_Data->renderer,
 			VBO1,
 			sizeof(VBO1) / sizeof(Vertex),
-			sizeof(Vertex)
+			sizeof(Vertex),
+			s_Data->renderer
 		);
-		new (&s_Data->ibo1) Influx::IndexBuffer(s_Data->renderer, IBO1, 36);
-		new (&s_Data->ubo1) Influx::UniformBuffer(s_Data->renderer, sizeof(UniformBufferObject), 0);
+
+		new (&s_Data->ibo1) Influx::IndexBuffer(IBO1, 36, s_Data->renderer);
+		new (&s_Data->ubo1) Influx::UniformBuffer(sizeof(UniformBufferObject), 0, s_Data->renderer);
 
 		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "tex.png");
 		if (!img)
@@ -161,7 +157,7 @@ namespace Nova {
 					(Neo::ExecDir() / "tex.png").C_STR()
 			);
 
-		new (&s_Data->texture) Influx::Texture(img, s_Data->renderer);
+		new (&s_Data->texture) Influx::Texture(img, 1, s_Data->renderer);
 
 		img.destroy();
 	}
@@ -215,8 +211,8 @@ namespace Nova {
 
 		s_Data->renderer.clear({ 0.11f, 0.11f, 0.13f, 1.0f });
 
-		s_Data->renderer.bind_ubo(s_Data->ubo1);
-		s_Data->ibo1.draw(s_Data->renderer, s_Data->vbo1);
+		s_Data->ubo1.bind(s_Data->renderer);
+		s_Data->ibo1.draw(s_Data->vbo1, s_Data->renderer);
 		s_Data->renderer.present();
 	}
 
