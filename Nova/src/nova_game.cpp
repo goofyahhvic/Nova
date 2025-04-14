@@ -7,8 +7,8 @@
 namespace Nova {
 	static const std::filesystem::path& ShaderDir(void)
 	{
-		static std::filesystem::path shader_dir = std::filesystem::path(Neo::ExecDir() / "../../../NeoInfused/Influx/shaders/").lexically_normal();
-		return shader_dir;
+		static std::filesystem::path x_ShaderDir = std::filesystem::path(Neo::ExecDir() / "../../../NeoInfused/Influx/shaders/").lexically_normal();
+		return x_ShaderDir;
 	}
 
 	void Game::Create(void)
@@ -197,10 +197,10 @@ namespace Nova {
 	{
 		//g_Logger.fmt(Neo::Trace, "{}fps", floor(1000.0 / dt));
 
-		static auto startTime = std::chrono::high_resolution_clock::now();
+		static auto x_StartTime = std::chrono::high_resolution_clock::now();
 
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+		auto current_time = std::chrono::high_resolution_clock::now();
+		float time = std::chrono::duration<float, std::chrono::seconds::period>(current_time - x_StartTime).count();
 
 		UniformBufferObject ubo{};
 
