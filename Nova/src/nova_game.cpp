@@ -75,6 +75,23 @@ namespace Nova {
 		{ { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f } }  // 23
 	};
 
+	Vertex VBO2[] = {
+		{ { -0.5f, -0.5f,  0.8f }, { 0.0f, 0.0f } },
+		{ {  0.5f, -0.5f,  0.8f }, { 1.0f, 0.0f } },
+		{ {  0.5f,  0.5f,  0.8f }, { 1.0f, 1.0f } },
+		{ { -0.5f,  0.5f,  0.8f }, { 0.0f, 1.0f } },
+
+		{ { -0.5f, -0.5f,  0.2f }, { 0.0f, 0.0f } },
+		{ {  0.5f, -0.5f,  0.2f }, { 1.0f, 0.0f } },
+		{ {  0.5f,  0.5f,  0.2f }, { 1.0f, 1.0f } },
+		{ { -0.5f,  0.5f,  0.2f }, { 0.0f, 1.0f } },
+	};
+
+	uint32_t IBO2[] {
+		4, 5, 6, 6, 7, 4,
+		0, 1, 2, 2, 3, 0,
+	};
+
 	uint32_t IBO1[] = 
 	{
 		// Front face (0, 1, 2, 3)
@@ -146,7 +163,7 @@ namespace Nova {
 			s_Data->renderer
 		);
 
-		new (&s_Data->ibo1) Influx::IndexBuffer(IBO1, 36, s_Data->renderer);
+		new (&s_Data->ibo1) Influx::IndexBuffer(IBO1, sizeof(IBO1) / sizeof(uint32_t), s_Data->renderer);
 		new (&s_Data->ubo1) Influx::UniformBuffer(sizeof(UniformBufferObject), 0, s_Data->renderer);
 
 		Influx::Image img = Influx::Image::Load(Neo::ExecDir() / "tex.png");
@@ -199,13 +216,12 @@ namespace Nova {
 			glm::vec3(0.0f, 0.0f, 1.0f)
 		);
 
-		ubo.proj = glm::perspective(
+		ubo.proj = Influx::perspective(
 			glm::radians(45.0f),
 			s_Data->renderer.width() / (float)s_Data->renderer.height(),
 			0.1f,
 			10.0f
 		);
-		ubo.proj[1][1] *= -1; 
 
 		s_Data->ubo1.update((void*)&ubo, s_Data->renderer);
 
